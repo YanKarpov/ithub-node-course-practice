@@ -1,4 +1,4 @@
-GET http://localhost:3000/event?id=1
+GET http://localhost:3000/event?id=3
 
 ###
 
@@ -6,9 +6,18 @@ POST http://localhost:3000/event
 Content-Type: application/json
 
 {
-    "title": "test3"
+    "title": "X-MAS"
 }
 
 ###
 
-DELETE http://localhost:3000/event?id=1
+DELETE http://localhost:3000/event?id=2
+
+###
+
+PATCH http://localhost:3000/event?id=1
+Content-Type: application/json
+
+{
+    "title": "B-day"
+}
