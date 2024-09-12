@@ -1,1 +1,10 @@
-[{"id":"1"},{"id":"2"},{"id":3,"title":"test"},{"id":4,"title":"test2"},{"id":5,"title":"test2"},{"id":6,"title":"test3"},{"id":7,"title":"Christmas"},{"id":8,"title":"X-MAS"}]
+[
+  { "id": "1" },
+  { "id": "2" },
+  { "id": 3, "title": "test" },
+  { "id": 4, "title": "test2" },
+  { "id": 5, "title": "test2" },
+  { "id": 6, "title": "test3" },
+  { "id": 7, "title": "Christmas" },
+  { "id": 8, "title": "X-MAS" }
+]

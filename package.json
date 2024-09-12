@@ -1,0 +1,15 @@
+{
+  "name": "ithub-node-practice",
+  "version": "0.0.1",
+  "description": "small web framework",
+  "main": "https",
+  "scripts": {
+    "test": "server.js",
+    "start": "node server.js"
+  },
+  "author": "Yan Karpov",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
