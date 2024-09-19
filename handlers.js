@@ -10,7 +10,7 @@ const parseParams = (url, param) => {
 // Обработчик для чтения событий
 const readEvents = async (request, response) => {
   const eventId = parseParams(request.url, "id");
-  const events = await readDB("events.json");
+  const events = await readDB("db/events.json");
 
   response.setHeader("Content-Type", "application/json");
   response.end(JSON.stringify(events.filter((event) => event.id == eventId)));
@@ -29,7 +29,7 @@ const createEvent = async (request, response) => {
 
   request.on("end", async () => {
     body = JSON.parse(body);
-    const result = await writeDB("events.json", body);
+    const result = await writeDB("db/events.json", body);
 
     response.end(JSON.stringify(result));
   });
@@ -38,14 +38,14 @@ const createEvent = async (request, response) => {
 // Обработчик для удаления события
 const deleteEvent = async (request, response) => {
   const eventId = parseParams(request.url, "id");
-  const deletedId = await deleteDB("events.json", eventId);
+  const deletedId = await deleteDB("db/events.json", eventId);
   response.end(JSON.stringify({ id: deletedId }));
 };
 
 // Обработчик для чтения комнат
 const readRooms = async (request, response) => {
   const roomId = parseParams(request.url, "id");
-  const rooms = await readDB("rooms.json");
+  const rooms = await readDB("db/rooms.json");
 
   response.setHeader("Content-Type", "application/json");
   response.end(JSON.stringify(rooms.filter((room) => room.id == roomId)));
@@ -64,7 +64,7 @@ const createRoom = async (request, response) => {
 
   request.on("end", async () => {
     body = JSON.parse(body);
-    const result = await writeDB("rooms.json", body);
+    const result = await writeDB("db/rooms.json", body);
 
     response.end(JSON.stringify(result));
   });
@@ -73,7 +73,7 @@ const createRoom = async (request, response) => {
 // Обработчик для удаления комнаты
 const deleteRoom = async (request, response) => {
   const roomId = parseParams(request.url, "id");
-  const deletedId = await deleteDB("rooms.json", roomId);
+  const deletedId = await deleteDB("db/rooms.json", roomId);
   response.end(JSON.stringify({ id: deletedId }));
 };
 
