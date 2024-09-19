@@ -1,9 +1,3 @@
-// const routingTable = {
-//     "GET /event": readEvents,
-//     "POST /event": createEvent,
-//     "DELETE /event": deleteEvent,
-//   };
-
 class Router {
   #baseUrl;
   #routingTable;
@@ -23,21 +17,29 @@ class Router {
   };
 
   handler = async (request, response) => {
-    if (request.url.startsWith("/event")) {
+    const method = request.method;
+    const url = new URL(request.url, this.#baseUrl).pathname;
+
+    const routeKey = `${method} ${url}`;
+    if (this.#routingTable[routeKey]) {
       try {
-        await this.#routingTable[`${request.method} /event`](request, response);
+        await this.#routingTable[routeKey](request, response);
       } catch (error) {
         this.handleNotFound(request, response);
       }
+    } else {
+      this.handleNotFound(request, response);
     }
   };
 
   get(endpoint, handler) {
     this.#routingTable[`GET ${endpoint}`] = handler;
   }
+  
   post(endpoint, handler) {
     this.#routingTable[`POST ${endpoint}`] = handler;
   }
+  
   delete(endpoint, handler) {
     this.#routingTable[`DELETE ${endpoint}`] = handler;
   }
