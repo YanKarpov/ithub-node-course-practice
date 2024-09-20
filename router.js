@@ -43,6 +43,10 @@ class Router {
   delete(endpoint, handler) {
     this.#routingTable[`DELETE ${endpoint}`] = handler;
   }
+
+  patch(endpoint, handler) {
+    this.#routingTable[`PATCH ${endpoint}`] = handler;
+  }
 }
 
 module.exports = { Router };

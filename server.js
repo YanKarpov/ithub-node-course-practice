@@ -4,7 +4,7 @@ dotenv.config();
 const { HOST, PORT, SSL } = process.env;
 
 const http = require("http");
-const { createEvent, deleteEvent, readEvents, createRoom, deleteRoom, readRooms } = require("./handlers");
+const { createEvent, deleteEvent, readEvents, updateEvent, createRoom, deleteRoom, readRooms } = require("./handlers");
 const { Router } = require("./router");
 
 const router = new Router(`http://${HOST}:${PORT}`, {
@@ -14,6 +14,7 @@ const router = new Router(`http://${HOST}:${PORT}`, {
 
 router.post('/event', createEvent);
 router.delete('/event', deleteEvent);
+router.patch('/event', updateEvent)
 
 router.post('/room', createRoom);
 router.delete('/room', deleteRoom);

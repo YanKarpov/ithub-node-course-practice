@@ -1,4 +1,4 @@
-const { readDB, writeDB, deleteDB } = require("./db_helpers");
+const { readDB, writeDB, deleteDB, updateDB } = require("./db_helpers");
 
 // Функция для извлечения параметров из URL
 const parseParams = (url, param) => {
@@ -42,6 +42,48 @@ const deleteEvent = async (request, response) => {
   response.end(JSON.stringify({ id: deletedId }));
 };
 
+const updateEvent = async (request, response) => {
+  const eventId = parseParams(request.url, "id");
+  const events = await readDB("db/events.json");
+
+  let body = "";
+  request.on("data", (chunk) => {
+    body += chunk;
+  });
+
+  request.on("end", async () => {
+    body = JSON.parse(body);
+
+    const eventToUpdateIndex = events.findIndex((event) => event.id == eventId);
+
+    if (!eventToUpdateIndex === -1) {
+      response.writeHead(404);
+      response.end();
+      return;
+    }
+
+    const isEqual =
+      JSON.stringify(events[eventToUpdateIndex]) === JSON.stringify(body);
+    if (isEqual) {
+      response.writeHead(204);
+      response.end();
+      return;
+    }
+
+    for (const [key, value] of Object.entries(body)) {
+      events[eventToUpdateIndex][key] = value;
+    }
+
+    const result = await updateDB("db/events.json", events);
+
+    response.writeHead(200, {
+      "Content-Type": "application/json",
+    });
+
+    response.end(JSON.stringify(result[eventToUpdateIndex]));
+  });
+};
+
 // Обработчик для чтения комнат
 const readRooms = async (request, response) => {
   const roomId = parseParams(request.url, "id");
@@ -77,4 +119,12 @@ const deleteRoom = async (request, response) => {
   response.end(JSON.stringify({ id: deletedId }));
 };
 
-module.exports = { createEvent, deleteEvent, readEvents, createRoom, deleteRoom, readRooms };
+module.exports = {
+  createEvent,
+  deleteEvent,
+  readEvents,
+  updateEvent,
+  createRoom,
+  deleteRoom,
+  readRooms,
+};
