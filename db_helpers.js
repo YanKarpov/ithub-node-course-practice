@@ -11,31 +11,38 @@ async function readDB(path) {
 
 async function writeDB(path, newData) {
   try {
-    const data = JSON.parse(await readFile(path, { encoding: "utf8" }));
-    const newEntry = { id: data.length + 1, ...newData };
+    const data = await readDB(path);
+    const newId = data.length > 0 ? Math.max(...data.map(entry => entry.id)) + 1 : 1;
+    const newEntry = { id: newId, ...newData };
 
-    await writeFile(path, JSON.stringify([...data, newEntry]));
+    await writeFile(path, JSON.stringify([...data, newEntry], null, 2));
     return newEntry;
   } catch (error) {
     console.error(error.message);
   }
 }
 
-async function updateDB(path, newData) {
+async function updateDB(path, updatedData) {
   try {
-    await writeFile(path, JSON.stringify(newData));
-    return newData;
+    await writeFile(path, JSON.stringify(updatedData, null, 2));
+    return updatedData;
   } catch (error) {
     console.error(error.message);
   }
 }
 
 async function deleteDB(path, deleteId) {
-  const data = JSON.parse(await readFile(path, { encoding: "utf8" }));
-  data[deleteId - 1] = { id: deleteId };
-  await writeFile(path, JSON.stringify(data));
+  try {
+    let data = await readDB(path);
+    
+    const updatedData = data.filter(entry => entry.id !== deleteId);
 
-  return deleteId;
+    await writeFile(path, JSON.stringify(updatedData, null, 2));
+    
+    return deleteId;
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
-module.exports = { readDB, writeDB, deleteDB, updateDB };
+module.exports = { readDB, writeDB, deleteDB, updateDB };g
